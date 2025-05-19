@@ -102,7 +102,7 @@
 
     function updateLeaderboard(selectGroup){
         const currGroupName = selectGroup.value;
-        const currGroup = groups.find(group => group.name === currGroupName);
+        const currGroup = groups.find(group => group.name.trim().toLowerCase() === currGroupName);
         console.log("Selected Group:", currGroupName, currGroup);
         let leaderboardArray = [];
         currGroup.members.forEach(member => {
