@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Account</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Delius&family=Playfair+Display+SC:ital,wght@0,400;0,700;0,900;1,400;1,700;1,900&display=swap" rel="stylesheet">
+</head>
+<body class="simple-center">
+    <h1>Create an Account</h1>
+
+    <form action="/create-account" method="post">
+        <input type="text" name="firstname" placeholder="First Name" required>
+        <input type="text" name="lastname" placeholder="Last Name" required> <br><br>
+        <input type="text" name="username" placeholder="Username" required>
+        <input type="text" name="password" placeholder="Password" required> <br><br>
+        <button type="submit">Create Account</button>
+    </form>
+    <br>
+    <p>Already have an account? <a href="/login">Login</a></p>
+
+</body>
+
+
+
+</html>

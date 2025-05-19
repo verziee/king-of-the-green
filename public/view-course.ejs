@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Course</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Delius&family=Playfair+Display+SC:ital,wght@0,400;0,700;0,900;1,400;1,700;1,900&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <div class="top-bar">
+
+        <div class="top-left">
+            <button onclick="location.href='/home'">Home</button>
+            <button onclick="location.href='/groups'">My Groups</button>
+            <button onclick="location.href='/courses'">Golf Courses</button>
+        </div>
+
+        <h1 class="topking">King of the Green</h1>
+        
+        <div class="top-right">
+            <button onclick="location.href='/logout'">Log out</button>
+        </div>    
+        <hr>
+
+    </div>
+    <div class="simple-center">
+        <h1><%= course.club_name %></h1> 
+        <form action="/input-score" method="get">
+            <input type="hidden" name="course-id" value="<%= course.id %>">
+            <input type="submit" id="input-score" name="input-score" value="Input round score">
+        </form>
+
+        <h3>Course Info:</h3>
+        Course Name: <%= course.course_name %> <br><br>
+        Location: <%= course.location.city %>, <%= course.location.state %>, <%= course.location.country %> <br><br>
+        Address: <%= course.location.address %> <br><br>
+        Course Rating: <%= course.tees.male[0].course_rating %> <br><br>
+
+        <h3>
+            <label for="selectTee">Stats for the</label>
+            <select id="selectTee" data=<%- JSON.stringify(course.tees.male) %> onchange="updateTeeStats(this)">
+                <% course.tees.male.forEach(tee => { %>
+                    <option value="<%= tee.tee_name %>" <%= tee.tee_name.toLowerCase().trim() === "white" ? "selected" : "" %>><%= tee.tee_name %></option>
+                <% }) %>
+            </select>
+            <label for="selectTee">tees:</label>
+        </h3>
+        <div id="teeStats">
+
+        </div>
+
+        <h3>Round History:</h3>
+            <% const roundHistory = user.round_history ? user.round_history[course.id] : null; console.log("EJS course id: ", course.id); console.log("EJS ROUND HISTORY: ", roundHistory); console.log("EJS USER ROUND HISTORY: ", user.round_history); %>
+            <% if(roundHistory && roundHistory.length > 0){ %>
+                <table border="1">
+                    <tr><th>Date</th><th>Score</th></tr>
+                    <% roundHistory.sort((a, b) => b.date - a.date) %>
+                    <% roundHistory.forEach(round => { %>
+                        <tr><td><%= new Date(round.date).toLocaleDateString('en-US') %></td><td><%= round.score %></td></tr>   
+                    <% }); %>
+                
+                </table>
+            <% } else { %>
+                No round history to display from this course.
+            <% } %>
+
+        <br><br>
+        <h3>
+            <label for="selectGroup">Group Leaderboard:</label>
+            <select id="selectGroup" data=<%- JSON.stringify(groups) %> onchange="updateLeaderboard(this)">
+                <% groups.forEach(group => { %>
+                    <option value="<%= group.name %>"><%= group.name %></option>
+                <% }) %>
+            </select>
+        </h3>
+
+        <div id="leaderboard">
+
+        </div>
+    </div>
+
+<script>
+    const selectTee = document.getElementById("selectTee");
+    const array = JSON.parse(selectTee.getAttribute("data"));
+    function updateTeeStats(selectTee){
+        const teeIndex = selectTee.selectedIndex;
+        let display = `Number of holes: ${array[teeIndex].number_of_holes}<br><br>`;
+        display += `Par: ${array[teeIndex].par_total}<br><br>`;
+        display += `Total Yards: ${array[teeIndex].total_yards}<br><br>`;
+        document.getElementById("teeStats").innerHTML = display;
+    }
+
+    const selectGroup = document.getElementById("selectGroup");
+    const groups = JSON.parse(selectGroup.getAttribute("data"));
+    console.log("Groups:", groups);
+    const courseId = "<%= course.id %>";
+
+    function updateLeaderboard(selectGroup){
+        const currGroupName = selectGroup.value;
+        const currGroup = groups.find(group => group.name === currGroupName);
+        console.log("Selected Group:", currGroupName, currGroup);
+        let leaderboardArray = [];
+        currGroup.members.forEach(member => {
+
+            console.log("Member:", member.firstname, member.lastname, "round_history:", member.round_history);
+            let lowestScore = 500;
+            const roundHistory = member.round_history ? member.round_history[courseId] : null;
+            if(roundHistory && roundHistory.length > 0){
+                roundHistory.forEach(round => {
+                    if(round.score < lowestScore){
+                        lowestScore = round.score;
+                    }
+                });
+            }
+
+            leaderboardArray.push({name: `${member.firstname} ${member.lastname}`, score: lowestScore});
+
+        });
+        leaderboardArray.sort((a, b) => a.score - b.score);
+        let display = "<table border='1'><tr><th>Rank</th><th>Name</th><th>Best Score</th></tr>";
+        let rank = 1;
+        leaderboardArray.forEach(item => {
+            display += `<tr><td>${rank}</td><td>${item.name}</td><td>${item.score !== 500 ? item.score : "N/A"}</td></tr>`;
+            rank++;
+        });
+
+        display += "</table>";
+        console.log("LEADERBOARD: ", leaderboardArray);
+        document.getElementById("leaderboard").innerHTML = display;
+    }
+
+    window.onload = () => {
+        updateTeeStats(document.getElementById("selectTee"));
+        updateLeaderboard(document.getElementById("selectGroup"));
+    }
+</script>
+
+</body>
+
+
+
+</html>

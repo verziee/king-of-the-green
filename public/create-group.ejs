@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create a Group</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Delius&family=Playfair+Display+SC:ital,wght@0,400;0,700;0,900;1,400;1,700;1,900&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <div class="top-bar">
+
+        <div class="top-left">
+            <button onclick="location.href='/home'">Home</button>
+            <button onclick="location.href='/groups'">My Groups</button>
+            <button onclick="location.href='/courses'">Golf Courses</button>
+        </div>
+
+        <h1 class="topking">King of the Green</h1>
+        
+        <div class="top-right">
+            <button onclick="location.href='/logout'">Log out</button>
+        </div>    
+        <hr>
+
+    </div>
+
+    <div class="simple-center">
+        <h1>Create a Group</h1>
+
+        (Do not add your username, created groups include you by default)<br><br>
+        <form action="/create-group" method="post">
+            <input type="text" id="group-name" name="group-name" placeholder="group name" required>
+            <input type="text" id="group-pw" name="group-pw" placeholder="group password" required>
+            <br><br><textarea id="description" name="description" rows="6" cols="44" placeholder="group description"></textarea>
+            <br><br>
+            <div id="members" style="display: inline;">
+                <input type="text" name="usernames[]" placeholder="Add member username">
+            </div>
+            <br><br><button type="button" onclick="addAnother()">Add another member</button>
+            
+            <input type="submit" id="create-group" name="create-group" value="Create Group">
+        </form><br><br>
+    </div>    
+        
+
+<script>
+    function addAnother(){
+        const members = document.getElementById("members");
+        members.insertAdjacentHTML("beforeend", "<br><br><input type=\"text\" name=\"usernames[]\" placeholder=\"Add member username\">");
+    }
+</script>
+
+</body>
+
+
+
+
+</html>

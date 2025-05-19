@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Group</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Delius&family=Playfair+Display+SC:ital,wght@0,400;0,700;0,900;1,400;1,700;1,900&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <div class="top-bar">
+
+        <div class="top-left">
+            <button onclick="location.href='/home'">Home</button>
+            <button onclick="location.href='/groups'">My Groups</button>
+            <button onclick="location.href='/courses'">Golf Courses</button>
+        </div>
+
+        <h1 class="topking">King of the Green</h1>
+        
+        <div class="top-right">
+            <button onclick="location.href='/logout'">Log out</button>
+        </div>    
+        <hr>
+
+    </div>
+    
+    <div class="simple-center">
+        <h1><%= group.name.toUpperCase() %></h1>
+        Members:
+        <ul>
+            <% group.members.forEach(member => { 
+                const isCurrUser = member._id.toString() === currUserId;
+            %>
+                <li> 
+                    <%= member.firstname %> <%= member.lastname %> 
+                    <% if(!isCurrUser){ %>
+                        <button onclick="removeMember('<%= member._id %>')">Remove</button>
+                    <% }else { %>
+                        <b>(You)</b>
+                    <% } %>
+                </li>
+            <% }) %>
+        </ul>
+
+
+        
+        <br>
+        <div class="inline">
+            <button onclick="addMember()">Add a member</button>
+            <button onclick="leaveGroup()">Leave group</button>
+        </div>    
+    </div>
+<script>
+    function removeMember(memberId){
+        fetch("/remove-member", {
+           method: "post",
+           headers: {"Content-Type": "application/json"},
+           body: JSON.stringify({
+                memberId: memberId,
+                groupId: "<%= group._id %>"
+           })
+        }).then(res => {
+            if (res.ok){
+                location.reload();
+            }else{
+                alert("Error removing member from group");
+            }
+        });
+    }
+    function leaveGroup(){
+        fetch("/leave-group", {
+           method: "post",
+           headers: {"Content-Type": "application/json"},
+           body: JSON.stringify({
+                groupId: "<%= group._id %>"
+           })
+        }).then(res => {
+            if (res.ok){
+                location.href = "/groups";
+            }else{
+                alert("Error leaving group");
+            }
+        });
+    }
+    async function addMember(){
+        const newMember = prompt("Enter the username of the user you wish to add to the group \n\n*If no user is added to the group, the username entered does not exist*").toLowerCase().trim();
+        fetch("/add-member", {
+           method: "post",
+           headers: {"Content-Type": "application/json"},
+           body: JSON.stringify({
+                groupId: "<%= group._id %>",
+                newMemberUsername: newMember
+           })
+        }).then(res => {
+            if (res.ok){
+                location.reload();
+            }else if (res.ok){
+                alert("User not found");
+                addMember();
+            }else{
+                alert("Error adding member to group");
+            }
+        });
+    }
+</script>
+
+</body>
+
+
+
+</html>

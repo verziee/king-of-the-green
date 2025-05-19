@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Groups</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Delius&family=Playfair+Display+SC:ital,wght@0,400;0,700;0,900;1,400;1,700;1,900&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <div class="top-bar">
+
+        <div class="top-left">
+            <button onclick="location.href='/home'">Home</button>
+            <button onclick="location.href='/groups'">My Groups</button>
+            <button onclick="location.href='/courses'">Golf Courses</button>
+        </div>
+
+        <h1 class="topking">King of the Green</h1>
+        
+        <div class="top-right">
+            <button onclick="location.href='/logout'">Log out</button>
+        </div>    
+        <hr>
+
+    </div>
+    <div class="simple-center">
+        <h1>My Groups</h1>
+
+        
+        <div id="my-groups">
+
+            <% if (groups.length === 0) { %>
+                You are not part of any groups.
+            <% } else { %>
+                <% groups.forEach(group => { %>
+                    <h2><%= group.name.toUpperCase()%></h2>
+                    Members:
+                    <ul>
+                        <% group.members.forEach(member => { %>
+                            <li> <%= member.firstname %> <%= member.lastname %></li>
+                        <% }) %>
+                    </ul>
+                    <form action="/manage-group" method="get">
+                        <input type="hidden" name="groupname" value="<%= group.name %>">
+                        <input type="submit" id="manage" name="manage" value="Manage group">
+                    </form>
+                <% }); %>
+            <% } %>
+        </div>
+    
+        <br>
+
+        <div class="inline">
+            <button onclick="location.href='/join-group'">Join a group</button>
+            <button onclick="location.href='/create-group'">Create a group</button>
+        </div>
+    </div>
+
+</body>
+
+
+
+</html>

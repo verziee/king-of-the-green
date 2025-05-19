@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Input Round</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Delius&family=Playfair+Display+SC:ital,wght@0,400;0,700;0,900;1,400;1,700;1,900&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <div class="top-bar">
+
+        <div class="top-left">
+            <button onclick="location.href='/home'">Home</button>
+            <button onclick="location.href='/groups'">My Groups</button>
+            <button onclick="location.href='/courses'">Golf Courses</button>
+        </div>
+
+        <h1 class="topking">King of the Green</h1>
+        
+        <div class="top-right">
+            <button onclick="location.href='/logout'">Log out</button>
+        </div>    
+        <hr>
+
+    </div>
+
+    <div class="simple-center">
+        <h1>Input Round Played at <%= course.club_name %></h1>
+
+        <form action="/input-round" method="post">
+            <input type="hidden" name="courseId" value="<%= course.id %>">
+            <input type="date" id="date" name="date" required>
+            <input type="text" id="round-score" name="round-score" placeholder="round score" required>
+            <input type="submit" id="submit-round" name="submit-round" value="Submit Round">
+        </form>
+        
+        <br><br>
+    </div>
+
+</body>
+
+
+
+</html>
