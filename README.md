@@ -9,6 +9,7 @@
     - While viewing courses, users can see their round history for that course, and select a group from the drop down to see how their best score on that course ranks 
       against their friends on the leaderboard.
     - Users can also click "Input round score" while viewing a course to log a new score for that course.
+    
 **YouTube Video Link:** https://youtu.be/vGCHCD4irg8
 
 **APIs:** GolfCourseAPI (https://golfcourseapi.com/)
